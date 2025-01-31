@@ -14,7 +14,7 @@ from src.sitesense_ai import SiteSenseAI
 
 ss_api: Flask = Flask(__name__)
 agent_emily: SiteSenseAI = SiteSenseAI(model="gpt-4-turbo", temp=0.8)
-CORS(ss_api)  # Enable CORS for all routes and origins
+CORS(ss_api)  # Enable CORS for all routes and origins, this is so the JS can communicate with the API
 
 
 @ss_api.route('/get-ai-response', methods=['POST'])
