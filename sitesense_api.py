@@ -7,12 +7,14 @@
 
 
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 from typing import Any
 from src.sitesense_ai import SiteSenseAI
 
 
 ss_api: Flask = Flask(__name__)
 agent_emily: SiteSenseAI = SiteSenseAI(model="gpt-4-turbo", temp=0.8)
+CORS(ss_api)  # Enable CORS for all routes and origins
 
 
 @ss_api.route('/get-ai-response', methods=['POST'])
