@@ -1,8 +1,8 @@
 #
 # Description: API gateway for SiteSense AI Agent, enabling communication between the AI logic and the frontend.
 # Author: Alexander Powell
-# Version: v1.0
-# Dependencies: flask, jsonify, sitesense_ai
+# Version: v1.1
+# Dependencies: flask, jsonify, sitesense_ai, markdown
 #
 
 
@@ -10,6 +10,8 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 from typing import Any
 from src.sitesense_ai import SiteSenseAI
+
+import markdown
 
 
 ss_api: Flask = Flask(__name__)
@@ -23,7 +25,8 @@ def get_response():
         if request.method == 'POST':
             data: Any = request.json
             ai_response: dict = agent_emily.engage(data["question"])
-            return jsonify("ai_response:", ai_response["output"]), 200
+            converted_response_text = markdown.markdown(ai_response["output"], extensions=['extra', 'nl2br'])
+            return jsonify("ai_response:", converted_response_text), 200
         else:
             return jsonify({"error": "Method not allowed"}), 405
 
