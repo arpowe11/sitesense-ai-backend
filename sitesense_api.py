@@ -16,7 +16,7 @@ import markdown
 
 ss_api: Flask = Flask(__name__)
 agent_emily: SiteSenseAI = SiteSenseAI(model="gpt-4-turbo", temp=0.8)
-CORS(ss_api)  # Enable CORS for all routes and origins, this is so the JS can communicate with the API
+CORS(ss_api, resources={r"/get-ai-response": {"origins": "https://sunsigndesigns.com"}})  # Enable CORS for all routes and origins, this is so the JS can communicate with the API
 
 
 @ss_api.route('/get-ai-response', methods=['POST'])
@@ -25,7 +25,7 @@ def get_response():
         if request.method == 'POST':
             data: Any = request.json
             ai_response: dict = agent_emily.engage(data["question"])
-            converted_response_text = markdown.markdown(ai_response["output"], extensions=['extra', 'nl2br'])
+            converted_response_text: str = markdown.markdown(ai_response["output"], extensions=['extra', 'nl2br'])
             return jsonify("ai_response:", converted_response_text), 200
         else:
             return jsonify({"error": "Method not allowed"}), 405
